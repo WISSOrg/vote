@@ -32,20 +32,24 @@ function addHandlers() {
 
   /* User login */
   router.post('/login', function(req, res, next) {
-    if (!req.body
-        || !req.body.id
-        || isNaN(parseInt(req.body.id))
-        || !req.body.name) {
+    if (!req.body) {
       return res.redirect('/?failure=1');
+    }
+    var param = '&id=' + req.body.id
+      + '&familyYomi=' + req.body.familyYomi;
+    if (!req.body.id
+        || isNaN(parseInt(req.body.id))
+        || !req.body.familyYomi) {
+      return res.redirect('/?failure=1' + param);
     }
     var user = _.find(users, {
         'id': parseInt(req.body.id)
     });
     if (!user) {
-      return res.redirect('/?failure=2');
+      return res.redirect('/?failure=2' + param);
     }
-    if (user.familyYomi !== req.body.name) {
-      return res.redirect('/?failure=3');
+    if (user.familyYomi !== req.body.familyYomi) {
+      return res.redirect('/?failure=3' + param);
     }
     req.session = {'user': user};
     res.redirect('/vote');

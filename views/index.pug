@@ -9,10 +9,21 @@ block content
       li 投票しなかった票は白票扱いとなります。
       li 何回でも投票内容を修正可能です。
     hr
-    form(action="/login", method="post")
-      legend 4桁の参加登録ID
-      input.form-control#inputId(type="text", placeholder="1234", required style="margin-bottom: 12px;")
-      legend 苗字 (family name) のひらがな表記
-      input.form-control#inputFamilyYomi(type="text", placeholder="ふくもと", required style="margin-bottom: 24px;")
-      button.btn.btn-lg.btn-primary.btn-block(type="submit") ログイン
+    - var clsId = failure === 1 || failure === 2 ? 'is-invalid' : undefined;
+    - var clsFamilyYomi = failure === 1 || failure === 3 ? 'is-invalid' : undefined;
+    - if (failure === 1) {
+    .alert.alert-danger(role="alert") 不正な入力値です。
+    - } else if (failure === 2) {
+    .alert.alert-danger(role="alert") IDが存在しません。
+    - } else if (failure === 3) {
+    .alert.alert-danger(role="alert") 苗字を確認してください。
+    - }
+    form(action="/users/login", method="post")
+      .form-group
+        label(for="id") 4桁の参加登録ID
+        input.form-control#inputId(name="id", type="text", placeholder="1234", required, style="margin-bottom: 12px;", class=clsId, value=id)
+      .form-group
+        label(for="familyYomi") 苗字 (family name) のひらがな表記
+        input.form-control#inputFamilyYomi(name="familyYomi", type="text", placeholder="ふくもと", required, style="margin-bottom: 24px;", class=clsFamilyYomi, value=familyYomi)
+      button.btn.btn-lg.btn-primary.btn-block(type="submit") 投票ページへ
 
