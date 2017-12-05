@@ -2,18 +2,20 @@ extends layout
 
 mixin votes-list(voteType)
   form.list-group
-    - var publicationsFound = publications && Array.isArray(publications);
+    - var publicationsFound = publications && Array.isArray(publications) && publications.length > 0;
     - if (publicationsFound) {
     .alert.alert-success 以下の発表に投票しました。
     -   for (var i = 0; i < publications.length; i ++) {
     -     var publication = publications[i];
     .list-group-item
-      strong #{publication.title}
+      strong
+        span.badge.badge-pill.badge-secondary #{publication[voteType + 'Id']}
+        | &nbsp;#{publication.title}
       br
       small #{publication.authors}
     -   }
     - } else {
-    .alert.alert-danger 発表データが見つかりません。
+    .alert.alert-danger 投票データをクリアしました。
     - }
     hr
     .text-center

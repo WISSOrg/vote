@@ -13,7 +13,7 @@ block content
   form(action=rootDir+"/users/login", method="get")
     .form-group
       label(for="id") 投票用番号
-      input.form-control#inputId(name="id", type="text", placeholder="1234", required, style="margin-bottom: 12px;", class=clsId, value=user ? user.id : (id ? id : ''))
+      input.form-control#inputId(name="id", type="text", placeholder="12345678-abcdef01-23456789", required, style="margin-bottom: 12px;", class=clsId, value=user ? user.id : (id ? id : ''))
     - if (!user) {
     button.btn.btn-lg.btn-primary.btn-block(type="submit") ログイン
     - }
