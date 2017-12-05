@@ -2,7 +2,17 @@ extends layout
 
 block content
   h2 集計結果
-  .alert.alert-primary(role='alert') 集計中です…
+  .papers
+    h3 発表賞
+    .results
+      .alert.alert-primary(role='alert') 集計中です…
+  .demos
+    h3 対話発表賞
+    .results
+      .alert.alert-primary(role='alert') 集計中です…
+
+block jquery
+  script(src='https://code.jquery.com/jquery-3.2.1.min.js', integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=', crossorigin='anonymous')
 
 block scripts
   script(src=rootDir+'/javascripts/admin.js')

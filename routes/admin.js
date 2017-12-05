@@ -15,7 +15,7 @@ router.get('/', function(req, res, next) {
   res.render('admin', { title: '集計結果 | WISS 2017' });
 });
 
-router.get('/get/:voteType/all', function(req, res, next) {
+router.get('/api/:voteType/all', function(req, res, next) {
   var db = req.db;
   var votes = db.collection(req.params['voteType']);
   votes.find({}).toArray(function(err, docs) {
@@ -27,7 +27,7 @@ router.get('/get/:voteType/all', function(req, res, next) {
   });
 });
 
-router.get('/get/:voteType/votes', function(req, res, next) {
+router.get('/api/:voteType/votes', function(req, res, next) {
   var db = req.db;
   var votes = db.collection(req.params['voteType']);
   getVotes(votes, (results)=>{
@@ -38,7 +38,7 @@ router.get('/get/:voteType/votes', function(req, res, next) {
   });
 });
 
-router.get('/get/:voteType/:userId', function(req, res, next) {
+router.get('/api/:voteType/:userId', function(req, res, next) {
   var db = req.db;
   var votes = db.collection(req.params['voteType']);
   votes
@@ -54,7 +54,7 @@ router.get('/get/:voteType/:userId', function(req, res, next) {
   });
 });
 
-router.get('/get/all/:voteType/:userId', function(req, res, next) {
+router.get('/api/all/:voteType/:userId', function(req, res, next) {
   var db = req.db;
   var votes = db.collection(req.params['voteType']);
   votes
