@@ -51,7 +51,7 @@ app.use((req, res, next)=>{
 app.use(cookieParser());
 
 // sass
-app.use(sassMiddleware({
+app.use(config.rootDir, sassMiddleware({
   src: path.join(__dirname, 'public'),
   dest: path.join(__dirname, 'public'),
   indentedSyntax: true, // true = .sass and false = .scss
