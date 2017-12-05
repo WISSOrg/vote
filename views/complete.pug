@@ -1,16 +1,20 @@
 extends layout
 
 block content
-  - if (papers && Array.isArray(papers)) {
-  .alert.alert-success 以下の論文に投票しました。
-  .list-group
-    - for (var i = 0; i < papers.length; i ++) {
-    -   var paper = papers[i];
+  form.list-group
+    - var papersFound = papers && Array.isArray(papers);
+    - if (papersFound) {
+    .alert.alert-success 以下の論文に投票しました。
+    -   for (var i = 0; i < papers.length; i ++) {
+    -     var paper = papers[i];
     .list-group-item
       strong #{paper.title}
       br
       small #{paper.authors}
+    -   }
+    - } else {
+    .alert.alert-danger 論文データが見つかりません。
     - }
-  - } else {
-  .alert.alert-danger 論文データが見つかりません。
-  - }
+    hr
+    .text-center
+      a.btn.btn-lg.btn-primary(href='/vote', class=papersFound ? undefined : 'disabled') 投票ページに戻る

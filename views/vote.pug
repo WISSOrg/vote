@@ -1,23 +1,30 @@
 extends layout
 
 block content
-  - if (papers && Array.isArray(papers)) {
   form.list-group(action="/complete", method="post")
-    - for (var i = 0; i < papers.length; i ++) {
-    -   var paper = papers[i];
-    a.list-group-item
-      strong #{paper.title}
-      input(type='hidden', name='papers['+paper.paperId+']', value='0')
-      input.float-right(type='checkbox', name='papers['+paper.paperId+']', value='1')
-      br
-      small #{paper.authors}
+    - var papersFound = papers && Array.isArray(papers);
+    - if (papersFound) {
+      - for (var i = 0; i < papers.length; i ++) {
+      -   var paper = papers[i];
+      -   var isChecked = false;
+      -   if (votes && Array.isArray(votes.votes)) {
+      -     for (var j = 0; j < votes.votes.length; j ++) {
+      -       isChecked = isChecked || votes.votes[j] === paper.paperId;
+      -     }
+      -   }
+      a.list-group-item(class=isChecked ? 'checked' : undefined)
+        strong #{paper.title}
+        input(type='hidden', name='papers['+paper.paperId+']', value='0')
+        input.float-right(type='checkbox', name='papers['+paper.paperId+']', value='1', checked=isChecked ? 'checked' : undefined)
+        br
+        small #{paper.authors}
+      - }
+    - } else {
+    .alert.alert-danger 論文データが見つかりません。
     - }
     hr
     .text-center
-      input.btn.btn-lg.btn-primary(type='submit', value='投票内容を決定する')
-  - } else {
-  .alert.alert-danger 論文データが見つかりません。
-  - }
+      input.btn.btn-lg.btn-primary(type='submit', value='投票内容を決定する', class=papersFound ? undefined : 'disabled')
 
 block scripts
   script(src='/javascripts/vote.js')

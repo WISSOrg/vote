@@ -46,7 +46,18 @@ csv().fromFile('config/papers.csv')
     if (!res.locals.user) {
       return res.redirect('/');
     }
-    res.render('vote', { title: '投票', papers: papers, posters: [] });
+
+    var db = req.db;
+    var votes = db.collection('votes');
+    votes
+        .find({'userId': res.locals.user.id})
+        .sort({'date': -1})
+        .limit(1)
+        .toArray(function(err, results) {
+      if (err || results.length <= 0) results = {};
+      else results = results[0];
+      res.render('vote', { title: '投票', papers: papers, votes: results });
+    });
   });
 
   /* Voting complete */
