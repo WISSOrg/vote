@@ -1,5 +1,18 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+  .container
+    h1 WISS 2017投票システム
+    ul
+      li 発表賞、対話発表賞、それぞれ1人3票まで投票できます。
+      li 同じ発表に投票できるのは1票までです。
+      li 投票しなかった票は白票扱いとなります。
+      li 何回でも投票内容を修正可能です。
+    hr
+    form(action="/login", method="post")
+      legend 4桁の参加登録ID
+      input.form-control#inputId(type="text", placeholder="1234", required style="margin-bottom: 12px;")
+      legend 苗字 (family name) のひらがな表記
+      input.form-control#inputFamilyYomi(type="text", placeholder="ふくもと", required style="margin-bottom: 24px;")
+      button.btn.btn-lg.btn-primary.btn-block(type="submit") ログイン
+
