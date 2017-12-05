@@ -40,8 +40,10 @@ app.use(cookieSession({
 app.use((req, res, next)=>{
   if (!req.session || !req.session.user) {
     res.locals.user = null;
+  } else {
+    res.locals.user = req.session.user;
   }
-  res.locals.user = req.session.user;
+  res.locals.rootDir = config.rootDir;
   next();
 });
 
@@ -57,17 +59,17 @@ app.use(sassMiddleware({
 }));
 
 // static files
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(config.rootDir, express.static(path.join(__dirname, 'public')));
 
 // mongodb
 app.use(expressMongoDb(config.mongoConnectionString));
 
 // routers
-app.use('/', index);
-app.use('/papers', papers);
-app.use('/demos', demos);
-app.use('/users', users);
-app.use('/admin', admin);
+app.use(config.rootDir + '/', index);
+app.use(config.rootDir + '/papers', papers);
+app.use(config.rootDir + '/demos', demos);
+app.use(config.rootDir + '/users', users);
+app.use(config.rootDir + '/admin', admin);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

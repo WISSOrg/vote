@@ -27,32 +27,32 @@ function addHandlers() {
   /* User logout */
   router.get('/logout', function(req, res, next) {
     req.session = null;
-    res.redirect('/');
+    return res.redirect(res.locals.rootDir + '/');
   });
 
   /* User login */
   router.post('/login', function(req, res, next) {
     if (!req.body) {
-      return res.redirect('/?failure=1');
+      return res.redirect(res.locals.rootDir + '/?failure=1');
     }
     var param = '&id=' + req.body.id
       + '&familyYomi=' + req.body.familyYomi;
     if (!req.body.id
         || isNaN(parseInt(req.body.id))
         || !req.body.familyYomi) {
-      return res.redirect('/?failure=1' + param);
+      return res.redirect(res.locals.rootDir + '/?failure=1' + param);
     }
     var user = _.find(users, {
         'id': parseInt(req.body.id)
     });
     if (!user) {
-      return res.redirect('/?failure=2' + param);
+      return res.redirect(res.locals.rootDir + '/?failure=2' + param);
     }
     if (user.familyYomi !== req.body.familyYomi) {
-      return res.redirect('/?failure=3' + param);
+      return res.redirect(res.locals.rootDir + '/?failure=3' + param);
     }
     req.session = {'user': user};
-    res.redirect('/papers');
+    res.redirect(res.locals.rootDir + '/papers');
   });
 
   /* List users */

@@ -14,7 +14,7 @@ csv().fromFile('config/demos.csv')
   /* Demos list */
   router.get('/', function(req, res, next) {
     if (!res.locals.user) {
-      return res.redirect('/');
+      return res.redirect(res.locals.rootDir + '/');
     }
 
     var db = req.db;
@@ -27,7 +27,7 @@ csv().fromFile('config/demos.csv')
   /* Voting complete */
   router.post('/vote', function(req, res, next) {
     if (!res.locals.user) {
-      return res.redirect('/');
+      return res.redirect(res.locals.rootDir + '/');
     }
 
     var votedPublications = req.body && req.body.demos

@@ -1,7 +1,7 @@
 extends layout
 
 block scripts
-  script(src='/javascripts/vote.js')
+  script(src=rootDir+'/javascripts/vote.js')
 
 mixin submit-button()
   .text-center
@@ -13,7 +13,7 @@ mixin votes-list(voteType)
     li 同じ発表に投票できるのは1票までです。
     li 投票しなかった票は白票扱いとなります。
     li 何回でも投票内容を修正可能です。
-  form.list-group.votes(action="/" + voteType + "s/vote", method="post")
+  form.list-group.votes(action=rootDir+"/" + voteType + "s/vote", method="post")
     - var publicationsFound = publications && Array.isArray(publications);
     - if (publicationsFound) {
       - for (var i = 0; i < publications.length; i ++) {

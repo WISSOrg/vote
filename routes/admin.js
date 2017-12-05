@@ -12,7 +12,7 @@ router.use((req, res, next)=>{
 
 /* Top page */
 router.get('/', function(req, res, next) {
-  res.redirect('/');
+  res.redirect(res.locals.rootDir + '/');
 });
 
 router.get('/get/:voteType/all', function(req, res, next) {
