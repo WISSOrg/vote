@@ -1,3 +1,16 @@
+
+mixin header
+  ul
+    li 発表賞、対話発表賞、それぞれ1人3票まで投票できます。
+    li 同じ発表に投票できるのは1票までです。
+    li 投票しなかった票は白票扱いとなります。
+    li 何回でも投票内容を修正可能です。
+  hr
+
+mixin footer
+  hr
+  footer.text-center &copy; WISS 2017
+
 doctype html
 html(lang='ja')
   head
@@ -7,7 +20,28 @@ html(lang='ja')
     link(rel='stylesheet', href='/stylesheets/bootstrap.min.css')
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
-    block content
+    nav.navbar.navbar-expand-lg.navbar-light.bg-light
+      a.navbar-brand('/') WISS 2017 投票システム
+      button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbarNav', aria-controls='navbarNav', aria-expanded='false', aria-label='Toggle navigation')
+        span.navbar-toggler-icon
+      .collapse.navbar-collapse#navbarNav
+        .navbar-nav.mr-auto
+          .nav-item
+            a.btn.btn-outline-primary(href='/') #{user ? 'ログインし直す' : 'ログイン'}
+          .nav-item
+            a.btn.btn-outline-primary(href='/vote', class=user ? undefined : 'disabled') 投票
+              - if (user && user.isCommittee) {
+              | &nbsp;
+              span.badge.badge-primary 委員
+              - }
+        .navbar-nav.ml-auto
+          .nav-item
+            a.btn.btn-outline-secondary(href='/users/logout', class=user ? undefined : 'disabled') ログアウト
+    .container
+      +header
+      block content
+      +footer
     script(src='https://code.jquery.com/jquery-3.2.1.slim.min.js', integrity='sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN', crossorigin='anonymous')
     script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js', integrity='sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh', crossorigin='anonymous')
     script(src='/javascripts/bootstrap.min.js')
+    block scripts

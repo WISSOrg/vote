@@ -18,7 +18,7 @@ csv().fromFile('config/users.csv')
     user.isCommittee = parseInt(user.isCommittee) === 1;
     users.push(user);
   })
-  .on('done',(error)=>{
+  .on('done', (error)=>{
     addHandlers();
   });
 

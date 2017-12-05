@@ -1,5 +1,23 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+  - if (papers && Array.isArray(papers)) {
+  form.list-group(action="/complete", method="post")
+    - for (var i = 0; i < papers.length; i ++) {
+    -   var paper = papers[i];
+    a.list-group-item
+      strong #{paper.title}
+      input(type='hidden', name='papers['+paper.paperId+']', value='0')
+      input.float-right(type='checkbox', name='papers['+paper.paperId+']', value='1')
+      br
+      small #{paper.authors}
+    - }
+    hr
+    .text-center
+      input.btn.btn-lg.btn-primary(type='submit', value='投票内容を決定する')
+  - } else {
+  .alert.alert-danger 論文データが見つかりません。
+  - }
+
+block scripts
+  script(src='/javascripts/vote.js')
