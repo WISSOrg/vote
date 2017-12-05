@@ -12,7 +12,7 @@ router.use((req, res, next)=>{
 
 /* Top page */
 router.get('/', function(req, res, next) {
-  res.redirect(res.locals.rootDir + '/');
+  res.render('admin', { title: '集計結果 | WISS 2017' });
 });
 
 router.get('/get/:voteType/all', function(req, res, next) {
