@@ -38,7 +38,7 @@ function addHandlers() {
       return res.render('login', {
           title: res.locals.confName + ' 投票システム'
         , failure: parseInt(req.query.failure)
-        , id: parseInt(req.query.id) });
+        , id: req.query.id });
     }
 
     if (!req.query.id) {
@@ -48,9 +48,9 @@ function addHandlers() {
       return res.render('login', {
           title: res.locals.confName + ' 投票システム' });
     }
-    var userId = parseInt(req.query.id);
+    var userId = req.query.id;
 
-    var param = '&id=' + userId;
+    var param = '&id=' + encodeURIComponent(userId);
     var db = req.db;
     var users = db.collection(userCollection);
     users.find({id: userId}).toArray(function(err, docs) {
@@ -71,6 +71,7 @@ function addHandlers() {
     if (!req.body) {
       return res.redirect(res.locals.rootDir + '/?failure=1');
     }
+
     var param = '&id=' + req.body.id
       + '&familyYomi=' + req.body.familyYomi;
     if (!req.body.id
@@ -78,6 +79,7 @@ function addHandlers() {
         || !req.body.familyYomi) {
       return res.redirect(res.locals.rootDir + '/?failure=1' + param);
     }
+
     var user = _.find(users, {
       'id': parseInt(req.body.id)
     });
@@ -93,28 +95,66 @@ function addHandlers() {
       , users_ = db.collection(userCollection);
     signups.find({id: user.id}).toArray(function(err, docs) {
       if (!err && Array.isArray(docs) && docs.length > 0) {
+
+        // Allow creating infinite new users by admins
+        if (_.includes(res.locals.admins, user.id)) {
+          return createNewUser(false);
+        }
         return res.redirect(res.locals.rootDir + '/?failure=4' + param);
       }
 
+      // Limit creating only one user by the others
+      createNewUser(user.isCommittee);
+    });
+
+    function createNewUser(isCommittee) {
+
       // TODO: duplicate check
-      var voteId = Math.floor(Math.random() * 100000000) + 1;
+      var voteId = guid();
 
       var newSignup = signups.insertOne({id: user.id})
-        , newUser = users_.insertOne({id: voteId, isCommittee: user.isCommittee});
+        , newUser = users_.insertOne({id: voteId, isCommittee: isCommittee});
       Promise.all([newSignup, newUser]).then(function(){
-        res.redirect(res.locals.rootDir + 'users/login?id=' + voteId);
+        res.redirect(res.locals.rootDir + '/users/login?id=' + voteId);
       });
-    });
+    }
   });
 
   /* List users */
-  router.get('/all', function(req, res, next) {
+  router.get('/api/all', function(req, res, next) {
     if (!res.locals.user
         || !res.locals.user.isCommittee) {
       return res.status(403).json({'error': 'you are not a committee member!'});
     }
     res.json(users);
   });
+
+  /* List vote ids */
+  router.get('/api/voters', function(req, res, next) {
+    if (!res.locals.user
+        || !res.locals.user.isCommittee) {
+      return res.status(403).json({'error': 'you are not a committee member!'});
+    }
+    var db = req.db;
+    var users_ = db.collection(userCollection);
+    users_.find({}).toArray(function(err, docs) {
+      if (err) {
+        res.json({"error": "no record found"});
+        return;
+      }
+      res.json({"results": docs});
+    });
+  });
+}
+
+// See https://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript for details
+function guid() {
+  function s4() {
+    return Math.floor((1 + Math.random()) * 0x10000)
+      .toString(16)
+      .substring(1);
+  }
+  return s4() + s4() + '-' + s4() + s4() + '-' + s4() + s4();
 }
 
 module.exports = router;

@@ -42,7 +42,7 @@ router.get('/api/:voteType/:userId', function(req, res, next) {
   var db = req.db;
   var votes = db.collection(req.params['voteType']);
   votes
-      .find({'userId': parseInt(req.params.userId)})
+      .find({'userId': req.params.userId})
       .sort({'date': -1})
       .limit(1)
       .toArray(function(err, docs) {
@@ -58,7 +58,7 @@ router.get('/api/all/:voteType/:userId', function(req, res, next) {
   var db = req.db;
   var votes = db.collection(req.params['voteType']);
   votes
-      .find({'userId': parseInt(req.params.userId)})
+      .find({'userId': req.params.userId})
       .toArray(function(err, docs) {
     if (err) {
       res.json({"error": "no record found"});
