@@ -9,12 +9,18 @@ block content
   .alert.alert-danger(role="alert") IDが存在しません。
   - } else if (failure === 3) {
   .alert.alert-danger(role="alert") 苗字を確認してください。
+  - } else if (failure === 4) {
+  .alert.alert-danger(role="alert") すでに投票用番号を取得済みです。
   - }
-  form(action=rootDir+"/users/login", method="post")
+  form(action=rootDir+"/users/signup", method="post")
     .form-group
       label(for="id") 4桁の参加登録ID
       input.form-control#inputId(name="id", type="text", placeholder="1234", required, style="margin-bottom: 12px;", class=clsId, value=id)
     .form-group
       label(for="familyYomi") 苗字 (family name) のひらがな表記
       input.form-control#inputFamilyYomi(name="familyYomi", type="text", placeholder="ふくもと", required, style="margin-bottom: 24px;", class=clsFamilyYomi, value=familyYomi)
-    button.btn.btn-lg.btn-primary.btn-block(type="submit") ログイン#{user ? 'し直す' : ''}
+    button.btn.btn-lg.btn-primary.btn-block(type="submit") 投票用番号を取得
+  hr
+  p すでに投票用番号をお持ちの方は&nbsp;
+    a.btn.btn-sm.btn-outline-primary(href=rootDir+'/users/login') ログイン
+    | &nbsp;(投票用番号の入力画面)へお進みください。

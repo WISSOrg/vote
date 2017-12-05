@@ -18,8 +18,8 @@ html(lang='ja')
         span.navbar-toggler-icon
       .collapse.navbar-collapse#navbarNav
         .navbar-nav.mr-auto
-          .nav-item
-            a.btn.btn-outline-primary(href=rootDir+'/') #{user ? 'ログインし直す' : 'ログイン'}
+          //.nav-item
+            a.btn.btn-outline-primary(href=rootDir+'/users/login') #{user ? 'ログインし直す' : 'ログイン'}
           .nav-item
             a.btn.btn-outline-primary(href=rootDir+'/papers', class=user ? undefined : 'disabled') 発表賞
           .nav-item

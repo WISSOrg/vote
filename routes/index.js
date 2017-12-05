@@ -6,10 +6,6 @@ router.get('/', function(req, res, next) {
 
   // load preset values
   var id, familyYomi;
-  if (res.locals.user) {
-    id = res.locals.user.id;
-    familyYomi = res.locals.user.familyYomi;
-  }
   if (req.query) {
     if (req.query.id) id = req.query.id;
     if (req.query.familyYomi) familyYomi = req.query.familyYomi;
