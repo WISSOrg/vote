@@ -22,7 +22,7 @@ csv().fromFile('config/papers.csv')
     var db = req.db;
     var votes = db.collection(collection);
     Controller.getPriorVotes(votes, res.locals.user.id, function(votes) {
-      res.render('papers-index', { title: '発表賞の投票 | WISS 2017', publications: publications, votes: votes });
+      res.render('papers-index', { title: '発表賞の投票 | ' + res.locals.confName, publications: publications, votes: votes });
     });
   });
 
@@ -44,7 +44,7 @@ csv().fromFile('config/papers.csv')
     var db = req.db;
     var votes = db.collection(collection);
     votes.insertOne(entry).then(function (result) {
-      res.render('papers-complete', { title: '発表賞の投票完了 | WISS 2017', publications: votedPublications });
+      res.render('papers-complete', { title: '発表賞の投票完了 | ' + res.locals.confName, publications: votedPublications });
     });
   });
 });

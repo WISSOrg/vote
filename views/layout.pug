@@ -1,7 +1,7 @@
 
 mixin footer
   hr
-  footer.text-center &copy; WISS 2017
+  footer.text-center &copy; #{confName}
 
 doctype html
 html(lang='ja')
@@ -13,7 +13,7 @@ html(lang='ja')
     link(rel='stylesheet', href=rootDir+'/stylesheets/style.css')
   body
     nav.navbar.navbar-expand-lg.navbar-light.bg-light
-      a.navbar-brand(href=rootDir+'/') WISS 2017 投票システム
+      a.navbar-brand(href=rootDir+'/') #{confName} 投票システム
       button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbarNav', aria-controls='navbarNav', aria-expanded='false', aria-label='Toggle navigation')
         span.navbar-toggler-icon
       .collapse.navbar-collapse#navbarNav
@@ -21,9 +21,9 @@ html(lang='ja')
           .nav-item
             a.btn.btn-outline-primary(href=rootDir+'/') #{user ? 'ログインし直す' : 'ログイン'}
           .nav-item
-            a.btn.btn-outline-primary(href=rootDir+'/papers', class=user ? undefined : 'disabled') 登壇投票
+            a.btn.btn-outline-primary(href=rootDir+'/papers', class=user ? undefined : 'disabled') 発表賞
           .nav-item
-            a.btn.btn-outline-primary(href=rootDir+'/demos', class=user ? undefined : 'disabled') デモ投票
+            a.btn.btn-outline-primary(href=rootDir+'/demos', class=user ? undefined : 'disabled') 対話発表賞
           - if (user && user.isCommittee) {
           .nav-item
             a.btn.btn-outline-danger(href=rootDir+'/admin', class=user ? undefined : 'disabled') 集計結果

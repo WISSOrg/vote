@@ -24,7 +24,7 @@ router.get('/', function(req, res, next) {
   }
 
   res.render('index', {
-      title: 'WISS 2017 投票システム'
+      title: res.locals.confName + ' 投票システム'
     , failure: failure
     , id: id
     , familyYomi: familyYomi });

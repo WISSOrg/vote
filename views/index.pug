@@ -17,4 +17,4 @@ block content
     .form-group
       label(for="familyYomi") 苗字 (family name) のひらがな表記
       input.form-control#inputFamilyYomi(name="familyYomi", type="text", placeholder="ふくもと", required, style="margin-bottom: 24px;", class=clsFamilyYomi, value=familyYomi)
-    button.btn.btn-lg.btn-primary.btn-block(type="submit") ログイン
+    button.btn.btn-lg.btn-primary.btn-block(type="submit") ログイン#{user ? 'し直す' : ''}
