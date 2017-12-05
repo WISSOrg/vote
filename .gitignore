@@ -1,4 +1,6 @@
 # Project-related files
+config/config.json
+config/users.csv
 mongodb/data/*
 mongodb/logs/*
 public/stylesheets/style.*

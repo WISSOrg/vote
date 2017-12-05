@@ -2,36 +2,57 @@ var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
+var cookieSession = require('cookie-session')
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var sassMiddleware = require('node-sass-middleware');
 var expressMongoDb = require('express-mongo-db');
 
+var config = require('./config/config.json');
 var index = require('./routes/index');
 var users = require('./routes/users');
 
 var app = express();
 
-// view engine setup
+// view engine (pug)
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+
+// logger
 app.use(logger('dev'));
+
+// body parser
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+
+// cookie session 
+app.use(cookieSession({
+  name: 'vote',
+  keys: config.cookieKeys,
+  maxAge: 7 * 24 * 60 * 60 * 1000 // 1 week
+}));
+
+// cookie parser
 app.use(cookieParser());
+
+// sass
 app.use(sassMiddleware({
   src: path.join(__dirname, 'public'),
   dest: path.join(__dirname, 'public'),
   indentedSyntax: true, // true = .sass and false = .scss
   sourceMap: true
 }));
+
+// static files
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(expressMongoDb('mongodb://localhost:27017/vote2017'));
+// mongodb
+app.use(expressMongoDb(config.mongoConnectionString));
 
+// routers
 app.use('/', index);
 app.use('/users', users);
 
