@@ -5,6 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var sassMiddleware = require('node-sass-middleware');
+var expressMongoDb = require('express-mongo-db');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
@@ -28,6 +29,8 @@ app.use(sassMiddleware({
   sourceMap: true
 }));
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(expressMongoDb('mongodb://localhost:27017/vote2017'));
 
 app.use('/', index);
 app.use('/users', users);
