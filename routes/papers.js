@@ -40,6 +40,7 @@ csv().fromFile('config/papers.csv')
     var voted = req.body && req.body.papers ? getValues(req.body.papers, papers) : [];
     var entry = {
         "userId": res.locals.user.id
+      , "isCommittee": res.locals.user.isCommittee
       , "votes": _.map(voted, (v)=>v.paperId)
       , "date": new Date()
     };
