@@ -3,17 +3,15 @@ var csv = require('csvtojson');
 var express = require('express');
 var router = express.Router();
 var Controller = require('./controller');
-var publications = [], collection = 'papers';
+var publications = [], collection = 'demos';
 
-csv().fromFile('config/papers.csv')
+csv().fromFile('config/demos.csv')
 .on('json', (jsonObj)=>{
-  var publication = _.clone(jsonObj);
-  publication.paperId = parseInt(publication.paperId);
-  publications.push(publication);
+  publications.push(jsonObj);
 })
 .on('done', (error)=>{
 
-  /* Papers list */
+  /* Demos list */
   router.get('/', function(req, res, next) {
     if (!res.locals.user) {
       return res.redirect('/');
@@ -22,7 +20,7 @@ csv().fromFile('config/papers.csv')
     var db = req.db;
     var votes = db.collection(collection);
     Controller.getPriorVotes(votes, res.locals.user.id, function(votes) {
-      res.render('papers-index', { title: '発表賞の投票 | WISS 2017', publications: publications, votes: votes });
+      res.render('demos-index', { title: '対話発表賞の投票 | WISS 2017', publications: publications, votes: votes });
     });
   });
 
@@ -32,19 +30,19 @@ csv().fromFile('config/papers.csv')
       return res.redirect('/');
     }
 
-    var votedPublications = req.body && req.body.papers
-      ? Controller.votesFromPost(req.body.papers, publications) : [];
+    var votedPublications = req.body && req.body.demos
+      ? Controller.votesFromPost(req.body.demos, publications) : [];
     var entry = {
         "userId": res.locals.user.id
       , "isCommittee": res.locals.user.isCommittee
-      , "votes": _.map(votedPublications, (publication)=>publication.paperId)
+      , "votes": _.map(votedPublications, (publication)=>publication.demoId)
       , "date": new Date()
     };
 
     var db = req.db;
     var votes = db.collection(collection);
     votes.insertOne(entry).then(function (result) {
-      res.render('papers-complete', { title: '発表賞の投票完了 | WISS 2017', publications: votedPublications });
+      res.render('demos-complete', { title: '対話発表賞の投票完了 | WISS 2017', publications: votedPublications });
     });
   });
 });

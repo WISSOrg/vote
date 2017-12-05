@@ -11,6 +11,7 @@ var expressMongoDb = require('express-mongo-db');
 var config = require('./config/config.json');
 var index = require('./routes/index');
 var papers = require('./routes/papers');
+var demos = require('./routes/demos');
 var users = require('./routes/users');
 var admin = require('./routes/admin');
 
@@ -64,6 +65,7 @@ app.use(expressMongoDb(config.mongoConnectionString));
 // routers
 app.use('/', index);
 app.use('/papers', papers);
+app.use('/demos', demos);
 app.use('/users', users);
 app.use('/admin', admin);
 

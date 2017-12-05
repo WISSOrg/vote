@@ -15,9 +15,9 @@ router.get('/', function(req, res, next) {
   res.redirect('/');
 });
 
-router.get('/get/all', function(req, res, next) {
+router.get('/get/:voteType/all', function(req, res, next) {
   var db = req.db;
-  var votes = db.collection('votes');
+  var votes = db.collection(req.params['voteType']);
   votes.find({}).toArray(function(err, docs) {
     if (err) {
       res.json({"error": "no record found"});
@@ -27,9 +27,9 @@ router.get('/get/all', function(req, res, next) {
   });
 });
 
-router.get('/get/votes', function(req, res, next) {
+router.get('/get/:voteType/votes', function(req, res, next) {
   var db = req.db;
-  var votes = db.collection('votes');
+  var votes = db.collection(req.params['voteType']);
   getVotes(votes, (results)=>{
     if (!results) {
       return res.json({"error": "no record found"});
@@ -38,9 +38,9 @@ router.get('/get/votes', function(req, res, next) {
   });
 });
 
-router.get('/get/:userId', function(req, res, next) {
+router.get('/get/:voteType/:userId', function(req, res, next) {
   var db = req.db;
-  var votes = db.collection('votes');
+  var votes = db.collection(req.params['voteType']);
   votes
       .find({'userId': parseInt(req.params.userId)})
       .sort({'date': -1})
@@ -54,9 +54,9 @@ router.get('/get/:userId', function(req, res, next) {
   });
 });
 
-router.get('/get/all/:userId', function(req, res, next) {
+router.get('/get/all/:voteType/:userId', function(req, res, next) {
   var db = req.db;
-  var votes = db.collection('votes');
+  var votes = db.collection(req.params['voteType']);
   votes
       .find({'userId': parseInt(req.params.userId)})
       .toArray(function(err, docs) {

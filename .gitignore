@@ -2,7 +2,7 @@
 config/config.json
 config/users.csv
 config/papers.csv
-config/posters.csv
+config/demos.csv
 mongodb/data/*
 mongodb/logs/*
 public/stylesheets/style.*

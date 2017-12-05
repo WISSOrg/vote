@@ -1,0 +1,20 @@
+extends layout
+
+mixin votes-list(voteType)
+  form.list-group
+    - var publicationsFound = publications && Array.isArray(publications);
+    - if (publicationsFound) {
+    .alert.alert-success 以下の発表に投票しました。
+    -   for (var i = 0; i < publications.length; i ++) {
+    -     var publication = publications[i];
+    .list-group-item
+      strong #{publication.title}
+      br
+      small #{publication.authors}
+    -   }
+    - } else {
+    .alert.alert-danger 発表データが見つかりません。
+    - }
+    hr
+    .text-center
+      a.btn.btn-lg.btn-primary(href='/'+voteType+'s', class=publicationsFound ? undefined : 'disabled') 投票ページに戻る

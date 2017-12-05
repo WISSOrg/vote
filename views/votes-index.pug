@@ -1,0 +1,39 @@
+extends layout
+
+block scripts
+  script(src='/javascripts/vote.js')
+
+mixin submit-button()
+  .text-center
+    input.btn.btn-lg.btn-primary(type='submit', value='投票内容を決定する', class=publicationsFound ? undefined : 'disabled')
+
+mixin votes-list(voteType)
+  ul
+    li 発表賞、対話発表賞、それぞれ1人3票まで投票できます。
+    li 同じ発表に投票できるのは1票までです。
+    li 投票しなかった票は白票扱いとなります。
+    li 何回でも投票内容を修正可能です。
+  form.list-group.votes(action="/" + voteType + "s/vote", method="post")
+    - var publicationsFound = publications && Array.isArray(publications);
+    - if (publicationsFound) {
+      - for (var i = 0; i < publications.length; i ++) {
+      -   var publication = publications[i];
+      -   var isChecked = false;
+      -   if (votes && Array.isArray(votes.votes)) {
+      -     for (var j = 0; j < votes.votes.length; j ++) {
+      -       isChecked = isChecked || votes.votes[j] === publication[voteType + 'Id'];
+      -     }
+      -   }
+      a.list-group-item(class=isChecked ? 'checked' : undefined)
+        strong
+          span.badge.badge-pill.badge-secondary #{publication[voteType + 'Id']}
+          | &nbsp;#{publication.title}
+        input(type='hidden', name=voteType+'s['+i+']', value='0')
+        input.float-right(type='checkbox', name=voteType+'s['+i+']', value='1', checked=isChecked ? 'checked' : undefined)
+        br
+        small #{publication.authors}
+      - }
+    - } else {
+    .alert.alert-danger 発表データが見つかりません。
+    - }
+    +submit-button()
