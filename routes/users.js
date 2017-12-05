@@ -57,9 +57,8 @@ function addHandlers() {
 
   /* List users */
   router.get('/list', function(req, res, next) {
-    if (!req.session
-        || !req.session.user
-        || req.session.user.isCommittee !== 1) {
+    if (!res.locals.user
+        || res.locals.user.isCommittee !== 1) {
       return res.status(403).json({'error': 'you are not a committee member!'});
     }
     res.json(users);

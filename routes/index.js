@@ -9,9 +9,9 @@ router.get('/', function(req, res, next) {
 
   // load preset values
   var id, familyYomi;
-  if (req.session && req.session.user) {
-    id = req.session.user.id;
-    familyYomi = req.session.user.familyYomi;
+  if (res.locals.user) {
+    id = res.locals.user.id;
+    familyYomi = res.locals.user.familyYomi;
   }
   if (req.query) {
     if (req.query.id) id = req.query.id;
@@ -43,7 +43,7 @@ csv().fromFile('config/papers.csv')
 
   /* Papers/posters list */
   router.get('/vote', function(req, res, next) {
-    if (!req.session || !req.session.user) {
+    if (!res.locals.user) {
       return res.redirect('/');
     }
     res.render('vote', { title: '投票', papers: papers, posters: [] });
@@ -51,11 +51,22 @@ csv().fromFile('config/papers.csv')
 
   /* Voting complete */
   router.post('/complete', function(req, res, next) {
-    if (!req.session || !req.session.user) {
+    if (!res.locals.user) {
       return res.redirect('/');
     }
+
     var voted = req.body && req.body.papers ? getValues(req.body.papers, papers) : [];
-    res.render('complete', { title: '投票完了', papers: voted });
+    var entry = {
+        "userId": res.locals.user.id
+      , "votes": _.map(voted, (v)=>v.paperId)
+      , "date": new Date()
+    };
+
+    var db = req.db;
+    var votes = db.collection('votes');
+    votes.insertOne(entry).then(function (result) {
+      res.render('complete', { title: '投票完了', papers: voted });
+    });
   });
 });
 
