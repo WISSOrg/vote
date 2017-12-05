@@ -1,8 +1,5 @@
-var _ = require('lodash');
-var csv = require('csvtojson');
 var express = require('express');
 var router = express.Router();
-var papers = [], posters = [];
 
 /* Top page */
 router.get('/', function(req, res, next) {
@@ -27,66 +24,10 @@ router.get('/', function(req, res, next) {
   }
 
   res.render('index', {
-      title: 'Express'
+      title: 'WISS 2017 投票システム'
     , failure: failure
     , id: id
     , familyYomi: familyYomi });
 });
-
-csv().fromFile('config/papers.csv')
-.on('json', (jsonObj)=>{
-  var paper = _.clone(jsonObj);
-  paper.paperId = parseInt(paper.paperId);
-  papers.push(paper);
-})
-.on('done', (error)=>{
-
-  /* Papers/posters list */
-  router.get('/vote', function(req, res, next) {
-    if (!res.locals.user) {
-      return res.redirect('/');
-    }
-
-    var db = req.db;
-    var votes = db.collection('votes');
-    votes
-        .find({'userId': res.locals.user.id})
-        .sort({'date': -1})
-        .limit(1)
-        .toArray(function(err, results) {
-      if (err || results.length <= 0) results = {};
-      else results = results[0];
-      res.render('vote', { title: '投票', papers: papers, votes: results });
-    });
-  });
-
-  /* Voting complete */
-  router.post('/complete', function(req, res, next) {
-    if (!res.locals.user) {
-      return res.redirect('/');
-    }
-
-    var voted = req.body && req.body.papers ? getValues(req.body.papers, papers) : [];
-    var entry = {
-        "userId": res.locals.user.id
-      , "votes": _.map(voted, (v)=>v.paperId)
-      , "date": new Date()
-    };
-
-    var db = req.db;
-    var votes = db.collection('votes');
-    votes.insertOne(entry).then(function (result) {
-      res.render('complete', { title: '投票完了', papers: voted });
-    });
-  });
-});
-
-function getValues(params, db) {
-  var indices = [];
-  _.forEach(params, function (v, i) {
-    if (Array.isArray(v) && v[1]) indices.push(i);
-  });
-  return _.map(indices, (key) => db[key]);
-}
 
 module.exports = router;

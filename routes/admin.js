@@ -3,8 +3,9 @@ var express = require('express');
 var router = express.Router();
 
 router.use((req, res, next)=>{
-  if (!res.locals.user || !res.locals.user.isCommittee) {
-    return res.status(403).json({'error': 'you are not a committee member.'});
+  if (!res.locals.user
+      || !res.locals.user.isCommittee) {
+    return res.status(403).json({'error': 'you are not a committee member!'});
   }
   next();
 });
@@ -29,27 +30,11 @@ router.get('/get/all', function(req, res, next) {
 router.get('/get/votes', function(req, res, next) {
   var db = req.db;
   var votes = db.collection('votes');
-  votes.aggregate( 
-    [
-      {"$sort": { "date": -1 }},
-      {"$group": { "_id": { userId: "$userId" }, "votes": { "$first": "$votes" } } }
-    ]
-  , function(err, docs) {
-    if (err) {
-      res.json({"error": "no record found"});
-      return;
+  getVotes(votes, (results)=>{
+    if (!results) {
+      return res.json({"error": "no record found"});
     }
-    var counts = _.reduce(docs, (cs, entry)=>{
-      if (Array.isArray(entry.votes)) {
-        _.each(entry.votes, (v)=>{
-          if (typeof cs[v] === 'undefined') cs[v] = 1;
-          else cs[v] ++;
-        });
-      }
-      return cs;
-    }, {});
-    var results = {'counts': counts}
-    res.json(results);
+    return res.json(results);
   });
 });
 
@@ -82,5 +67,29 @@ router.get('/get/all/:userId', function(req, res, next) {
     res.json({"results": docs});
   });
 });
+
+function getVotes(votes, callback) {
+  votes.aggregate( 
+    [
+      {"$sort": { "date": -1 }},
+      {"$group": { "_id": { userId: "$userId" }, "votes": { "$first": "$votes" } } }
+    ]
+  , function(err, docs) {
+    if (err) {
+      return callback(null);
+    }
+    var counts = _.reduce(docs, (cs, entry)=>{
+      if (Array.isArray(entry.votes)) {
+        _.each(entry.votes, (v)=>{
+          if (typeof cs[v] === 'undefined') cs[v] = 1;
+          else cs[v] ++;
+        });
+      }
+      return cs;
+    }, {});
+    var results = {'counts': counts}
+    callback(results);
+  });
+}
 
 module.exports = router;

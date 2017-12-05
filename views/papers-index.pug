@@ -1,7 +1,7 @@
 extends layout
 
 block content
-  form.list-group(action="/complete", method="post")
+  form.list-group(action="/papers/vote", method="post")
     - var papersFound = papers && Array.isArray(papers);
     - if (papersFound) {
       - for (var i = 0; i < papers.length; i ++) {

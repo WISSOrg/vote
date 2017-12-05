@@ -52,13 +52,13 @@ function addHandlers() {
       return res.redirect('/?failure=3' + param);
     }
     req.session = {'user': user};
-    res.redirect('/vote');
+    res.redirect('/papers');
   });
 
   /* List users */
-  router.get('/list', function(req, res, next) {
+  router.get('/all', function(req, res, next) {
     if (!res.locals.user
-        || res.locals.user.isCommittee !== 1) {
+        || !res.locals.user.isCommittee) {
       return res.status(403).json({'error': 'you are not a committee member!'});
     }
     res.json(users);
