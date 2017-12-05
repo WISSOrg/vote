@@ -6,6 +6,19 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
+router.get('/vote', function(req, res, next) {
+  if (!req.user) {
+    return res.redirect('/');
+  }
+  // load csv
+  res.render('vote', { title: '投票', papers: [], posters: [] });
+});
+
+router.post('/complete', function(req, res, next) {
+  // register
+  res.render('complete', { title: '投票完了' });
+});
+
 router.get('/put', function(req, res, next) {
   if (!req.query
       || !req.query.id
