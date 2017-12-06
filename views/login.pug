@@ -24,9 +24,9 @@ block content
   - }
   h2 投票用番号
   - if (user) {
-  p ログインには投票用番号が必要です。
-  - } else {
   p 端末を変えたり、ブラウザを変えたりすると、以下の投票用番号を使って再度ログインする必要があります。書き留めておきましょう。
+  - } else {
+  p ログインには投票用番号が必要です。
   - }
   form(action=rootDir+"/users/login", method="get")
     .form-group
