@@ -15,8 +15,8 @@ mixin votes-list(voteType)
       small #{publication.authors}
     -   }
     - } else {
-    .alert.alert-danger 投票データをクリアしました。
+    .alert.alert-warning 白票を投じました。（以前投票した発表がある場合、白票で上書きされています。投票ページに戻って改めて投票してください。）
     - }
     hr
     .text-center
-      a.btn.btn-lg.btn-primary(href=rootDir+'/'+voteType+'s', class=publicationsFound ? undefined : 'disabled') 投票ページに戻る
+      a.btn.btn-lg.btn-primary(href=rootDir+'/'+voteType+'s') 投票ページに戻る
