@@ -3,6 +3,7 @@ Add config.json in the following format:
 ```
 {
   "confName": "WISS 2017",
+  "host": "www.wiss.org",
   "admins": [100, 108],
   "rootDir": "/wiss2017",
   "cookieKeys": ["wiss2017", "vote2017"],
