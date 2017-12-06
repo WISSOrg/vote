@@ -38,6 +38,17 @@ router.get('/api/:voteType/votes', function(req, res, next) {
   });
 });
 
+router.get('/api/:voteType/votes/committee', function(req, res, next) {
+  var db = req.db;
+  var votes = db.collection(req.params['voteType']);
+  getVotes(votes, (results)=>{
+    if (!results) {
+      return res.json({"error": "no record found"});
+    }
+    return res.json(results);
+  }, true);
+});
+
 router.get('/api/:voteType/:userId', function(req, res, next) {
   var db = req.db;
   var votes = db.collection(req.params['voteType']);
@@ -68,13 +79,15 @@ router.get('/api/all/:voteType/:userId', function(req, res, next) {
   });
 });
 
-function getVotes(votes, callback) {
-  votes.aggregate( 
-    [
-      {"$sort": { "date": -1 }},
-      {"$group": { "_id": { userId: "$userId" }, "votes": { "$first": "$votes" } } }
-    ]
-  , function(err, docs) {
+function getVotes(votes, callback, committeeFilter) {
+  var pipeline = [
+    {"$sort": { "date": -1 }},
+    {"$group": { "_id": { userId: "$userId" }, "votes": { "$first": "$votes" } } }
+  ];
+  if (committeeFilter) {
+    pipeline.unshift({"$match": { "isCommittee": true }});
+  }
+  votes.aggregate(pipeline, function(err, docs) {
     if (err) {
       return callback(null);
     }

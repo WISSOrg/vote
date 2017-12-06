@@ -5,18 +5,21 @@ var rootDir = pathname.substring(0, pathname.length-'/admin'.length);
 
 var db = {};
 initialize('paper');
-initialize('demo');
+initialize('demo', function() {
+  updateVotes('demo', true);
+});
 
-function initialize(voteType) {
+function initialize(voteType, callback) {
   $.getJSON(rootDir + "/" + voteType + "s/api/all", function(data){
     db[voteType] = data;
-    updateVotes(voteType);
+    updateVotes(voteType, false, callback);
   });
 }
 
-function updateVotes(voteType) {
-  $.getJSON(pathname + "/api/" + voteType + "s/votes", function(votes){
-    var $div = $('.' + voteType + 's .results');
+function updateVotes(voteType, committeeFilter, callback) {
+  $.getJSON(pathname + "/api/" + voteType + "s/votes"
+      + (committeeFilter ? '/committee' : ''), function(votes){
+    var $div = $('.' + (committeeFilter ? 'committee-' : '') + voteType + 's .results');
     $div.empty();
     $div.append('<table class="table table-striped"><thead><tr><th class="w-75">発表</th><th class="w-25">得票数</th></tr></thead><tbody></tbody></table>');
     var $tbody = $div.find('tbody');
@@ -37,6 +40,7 @@ function updateVotes(voteType) {
         .append('<small>' + entry.authors + '</small>');
       $tbody.append($tr);
     }
+    if (callback) callback();
   });
 }
 
