@@ -4,6 +4,11 @@ var router = express.Router();
 /* Top page */
 router.get('/', function(req, res, next) {
 
+  // do not show this page for authenticated users
+  if (res.locals.user) {
+    return res.redirect(res.locals.rootDir + '/users/login');
+  }
+
   // load preset values
   var id, familyYomi;
   if (req.query) {

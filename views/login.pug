@@ -17,12 +17,14 @@ block content
     |  &amp; 
     a.btn.btn-sm.btn-outline-primary(href=rootDir + '/demos') 対話発表賞
     |  どちらの投票もお忘れなく！
-  .text-center.qr.code
-    img(src='https://chart.googleapis.com/chart?chs=320x320&cht=qr&chl=http%3A%2F%2Fwww.wiss.org' + encodeURIComponent(rootDir + '/users/login?id='+user.id) + '&choe=UTF-8')
   - }
   - var clsId = failure === 1 || failure === 2 ? 'is-invalid' : undefined;
   - if (failure === 1) {
   .alert.alert-danger(role="alert") 投票用番号が存在しません。
+  - }
+  h2 投票用番号
+  - if (!user) {
+  p ログインには投票用番号が必要です。
   - }
   form(action=rootDir+"/users/login", method="get")
     .form-group
@@ -31,7 +33,19 @@ block content
     - if (!user) {
     button.btn.btn-lg.btn-primary.btn-block(type="submit") ログイン
     - }
-  - if (!user) {
+  - if (user) {
+  .text-center.qr.code
+    img(src='https://chart.googleapis.com/chart?chs=320x320&cht=qr&chl=' + encodeURIComponent(url + '/users/login?id='+user.id) + '&choe=UTF-8')
+  hr
+  h2 他の人を投票に誘おう
+  p 上のQRコードは投票用番号を含んでいるため、他の人には見せないでください。他の人を投票に誘う場合は、以下のURLを伝えるか、QRコードを見せてください。
+  form
+    .form-group
+      label 投票システムのURL:
+      input.form-control(name="url", type="text", value=url, readonly)
+  .text-center.qr.code
+    img(src='https://chart.googleapis.com/chart?chs=320x320&cht=qr&chl=' + encodeURIComponent(url) + '&choe=UTF-8')
+  - } else {
   hr
   p まだ投票用番号をお持ちでない方は&nbsp;
     a.btn.btn-sm.btn-outline-primary(href=rootDir) 投票用番号を取得
