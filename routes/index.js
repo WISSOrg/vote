@@ -26,4 +26,10 @@ router.get('/', function(req, res, next) {
     , familyYomi: familyYomi });
 });
 
+/* About this system */
+router.get('/about', function(req, res, next) {
+  res.render('about', {
+      title: res.locals.confName + ' 投票システムについて' });
+});
+
 module.exports = router;

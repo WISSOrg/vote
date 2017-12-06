@@ -1,0 +1,44 @@
+extends layout
+
+block content
+  h2 この投票システムについて
+  .alert.alert-primary 使い方については
+    a(href='http://www.wiss.org/WISS2017Local/wiki/index.php?FrontPage#aaa27532') Wiki
+    | もご覧ください。
+  h3 Introduction
+  ul
+    li WISS 2016までは、紙で投票用トークンを配っていました
+      ul
+        li 手入力が煩雑で、紙の紛失リスクもありました
+        li 一方、紙と投票者の組がランダムで匿名性がありました
+    li WISS 2017では、デジタルで完結する利便性と、投票者の匿名性保持を両立する投票システムを目指します
+  h3 Method
+  ul
+    li 投票を2ステップに分けました（が、ユーザ視点ではそれほど意識しなくても済むようになっています）
+      ol
+        li 参加登録IDと苗字の組で参加者を認証し、一度だけランダムな
+          strong 投票用番号
+          | を生成します
+        li この匿名の番号を固有のユーザIDとして用い、投票を行います
+    li 匿名性を保つために、以下の工夫を行っています
+      ul
+        li 投票用番号の発行状況と投票用番号は別々のデータベースに保存されます
+        li 発行状況と投票用番号は同時にデータベースに保存されますが、順不同かつタイムスタンプを持たないデータベースなので関係性を復元できません
+  h3 Evaluation
+  ul
+    li 不具合が起きないことを祈っています
+  h3 Limitation &amp; Future Work
+  ul
+    li 急造のシステムなので、バグや仕様上のミスがあるかもしれません
+    li
+      a(href='https://github.com/WISSOrg/vote') GitHub
+      | にソースコードを公開しているので、何かあれば issue を投げたり pull request を送ったりしてください
+    li せっかく作ったので新機能が急に増えるかもしれません
+  hr
+  p システムを使う前に、まず&nbsp;
+    a.btn.btn-sm.btn-outline-primary(href=rootDir+'/') 投票用番号を取得
+    | &nbsp;してください。
+  hr
+  p すでに投票用番号をお持ちの方は&nbsp;
+    a.btn.btn-sm.btn-outline-primary(href=rootDir+'/users/login') ログイン
+    | &nbsp;してください。
