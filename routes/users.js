@@ -27,9 +27,17 @@ csv().fromFile('config/users.csv')
 function addHandlers() {
 
   /* User logout */
-  router.get('/logout', function(req, res, next) {
+  router.post('/logout', function(req, res, next) {
     req.session = null;
     return res.redirect(res.locals.rootDir + '/users/login');
+  });
+
+  /* User logout confirmation */
+  router.get('/logout', function(req, res, next) {
+    if (!res.locals.user) {
+      return res.redirect(res.locals.rootDir + '/users/login');
+    }
+    return res.redirect(res.locals.rootDir + '/users/login?id=' + res.locals.user.id + '&logout=1');
   });
 
   /* User login */
@@ -62,7 +70,8 @@ function addHandlers() {
       req.session = {'user': user};
       return res.render('login', {
           title: res.locals.confName + ' 投票システム'
-        , user: user });
+        , user: user
+        , logout: req.query.logout });
     });
   });
 

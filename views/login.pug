@@ -2,7 +2,16 @@ extends layout
 
 block content
   - if (user) {
+  -   if (logout) {
+  form.alert.alert-warning(action=rootDir + '/users/logout', method='post')
+    p ログアウトすると、投票結果を修正できなくなります。以下の投票者用番号をメモしてあれば、再度ログインして修正できます。投票者用番号は原則再発行できないため、ログアウトするときは必ず番号を控えておくようにお願いします。
+    hr
+    input.btn.btn-danger(type='submit', value='ログアウトする')
+    | &nbsp;
+    a.btn.btn-outline-primary(href=rootDir + '/users/login') キャンセル
+  -   } else {
   .alert.alert-info(role="alert") ログイン済みです。このページをブックマークするか、以下のQRコードを使えば、いつでもこの投票用番号にアクセスできます。
+  -   }
   .alert.alert-info(role="alert")
     a.btn.btn-sm.btn-outline-primary(href=rootDir + '/papers') 発表賞
     |  &amp; 
