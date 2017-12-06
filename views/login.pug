@@ -23,8 +23,10 @@ block content
   .alert.alert-danger(role="alert") 投票用番号が存在しません。
   - }
   h2 投票用番号
-  - if (!user) {
+  - if (user) {
   p ログインには投票用番号が必要です。
+  - } else {
+  p 端末を変えたり、ブラウザを変えたりすると、以下の投票用番号を使って再度ログインする必要があります。書き留めておきましょう。
   - }
   form(action=rootDir+"/users/login", method="get")
     .form-group
