@@ -13,6 +13,11 @@ csv().fromFile('config/papers.csv')
 })
 .on('done', (error)=>{
 
+  /* For Ajax request */
+  router.get('/api/all', function(req, res, next) {
+    return res.json(publications);
+  });
+
   /* Papers list */
   router.get('/', function(req, res, next) {
     if (!res.locals.user) {

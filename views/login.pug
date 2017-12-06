@@ -3,7 +3,12 @@ extends layout
 block content
   - if (user) {
   .alert.alert-info(role="alert") ログイン済みです。このページをブックマークするか、以下のQRコードを使えば、いつでもこの投票用番号にアクセスできます。
-  .text-center
+  .alert.alert-info(role="alert")
+    a.btn.btn-sm.btn-outline-primary(href=rootDir + '/papers') 発表賞
+    |  &amp; 
+    a.btn.btn-sm.btn-outline-primary(href=rootDir + '/demos') 対話発表賞
+    |  どちらの投票もお忘れなく！
+  .text-center.qr.code
     img(src='https://chart.googleapis.com/chart?chs=320x320&cht=qr&chl=http%3A%2F%2Fwww.wiss.org' + encodeURIComponent(rootDir + '/users/login?id='+user.id) + '&choe=UTF-8')
   - }
   - var clsId = failure === 1 || failure === 2 ? 'is-invalid' : undefined;
@@ -12,8 +17,8 @@ block content
   - }
   form(action=rootDir+"/users/login", method="get")
     .form-group
-      label(for="id") 投票用番号
-      input.form-control#inputId(name="id", type="text", placeholder="12345678-abcdef01-23456789", required, style="margin-bottom: 12px;", class=clsId, value=user ? user.id : (id ? id : ''))
+      label(for="id") 投票用番号:
+      input.form-control#inputId(name="id", type="text", placeholder="12345678-abcdef01-23456789", required, style="margin-bottom: 12px;", class=clsId, value=user ? user.id : (id ? id : ''), readonly=user ? true : undefined)
     - if (!user) {
     button.btn.btn-lg.btn-primary.btn-block(type="submit") ログイン
     - }

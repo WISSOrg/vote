@@ -14,10 +14,10 @@ block content
   - }
   form(action=rootDir+"/users/signup", method="post")
     .form-group
-      label(for="id") 4桁の参加登録ID
+      label(for="id") 4桁の参加登録ID:
       input.form-control#inputId(name="id", type="text", placeholder="1234", required, style="margin-bottom: 12px;", class=clsId, value=id)
     .form-group
-      label(for="familyYomi") 苗字 (family name) のひらがな表記
+      label(for="familyYomi") 苗字 (family name) のひらがな表記:
       input.form-control#inputFamilyYomi(name="familyYomi", type="text", placeholder="ふくもと", required, style="margin-bottom: 24px;", class=clsFamilyYomi, value=familyYomi)
     button.btn.btn-lg.btn-primary.btn-block(type="submit") 投票用番号を取得
   hr

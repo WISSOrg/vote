@@ -11,6 +11,11 @@ csv().fromFile('config/demos.csv')
 })
 .on('done', (error)=>{
 
+  /* For Ajax request */
+  router.get('/api/all', function(req, res, next) {
+    return res.json(publications);
+  });
+
   /* Demos list */
   router.get('/', function(req, res, next) {
     if (!res.locals.user) {
