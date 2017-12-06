@@ -116,6 +116,7 @@ function addHandlers() {
         , newUser = users_.insertOne({id: voteId, isCommittee: isCommittee});
       Promise.all([newSignup, newUser]).then(function(){
         res.redirect(res.locals.rootDir + '/users/login?id=' + voteId);
+        moveRandomEntry(users_);
       });
     }
   });
@@ -145,6 +146,27 @@ function addHandlers() {
       res.json({"results": docs});
     });
   });
+
+  /* Return a random user */
+  router.get('/api/voters/random', function(req, res, next) {
+    if (!res.locals.user
+        || !res.locals.user.isCommittee) {
+      return res.status(403).json({'error': 'you are not a committee member!'});
+    }
+    var db = req.db;
+    var users_ = db.collection(userCollection);
+    users_.aggregate(
+      [
+        {$sample:{size: 1}}
+      ]
+    , function(err, docs){
+      if (err) {
+        res.json({"error": "no record found"});
+        return;
+      }
+      res.json({"results": docs});
+    });
+  });
 }
 
 // See https://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript for details
@@ -155,6 +177,27 @@ function guid() {
       .substring(1);
   }
   return s4() + s4() + '-' + s4() + s4() + '-' + s4() + s4();
+}
+
+function moveRandomEntry(collection, callback) {
+  collection.aggregate(
+    [
+      {$sample:{size: 1}}
+    ]
+  , function(err, docs){
+    if (err || !Array.isArray(docs) || docs.length <= 0) {
+      if (callback) callback(null);
+      return;
+    }
+    var entry = docs[0];
+    collection.deleteOne(entry).then(function (){
+      delete entry['_id'];
+      collection.insertOne(entry).then(()=>{
+        if (callback) callback(entry);
+        return;
+      });
+    });
+  });
 }
 
 module.exports = router;
