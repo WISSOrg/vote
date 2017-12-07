@@ -20,37 +20,39 @@ csv().fromFile('config/papers.csv')
 
   /* Papers list */
   router.get('/', function(req, res, next) {
-    if (!res.locals.user) {
-      return res.redirect(res.locals.rootDir + '/');
-    }
+    // if (!res.locals.user) {
+    //   return res.redirect(res.locals.rootDir + '/');
+    // }
 
-    var db = req.db;
-    var votes = db.collection(collection);
-    Controller.getPriorVotes(votes, res.locals.user.id, function(votes) {
-      res.render('papers-index', { title: '発表賞の投票 | ' + res.locals.confName, publications: publications, votes: votes });
-    });
+    // var db = req.db;
+    // var votes = db.collection(collection);
+    // Controller.getPriorVotes(votes, res.locals.user.id, function(votes) {
+    //   res.render('papers-index', { title: '発表賞の投票 | ' + res.locals.confName, publications: publications, votes: votes });
+    // });
+    res.json({"error": "voting is disabled"});
   });
 
   /* Voting complete */
   router.post('/vote', function(req, res, next) {
-    if (!res.locals.user) {
-      return res.redirect(res.locals.rootDir + '/');
-    }
+    // if (!res.locals.user) {
+    //   return res.redirect(res.locals.rootDir + '/');
+    // }
 
-    var votedPublications = req.body && req.body.papers
-      ? Controller.votesFromPost(req.body.papers, publications) : [];
-    var entry = {
-        "userId": res.locals.user.id
-      , "isCommittee": res.locals.user.isCommittee
-      , "votes": _.map(votedPublications, (publication)=>publication.paperId)
-      , "date": new Date()
-    };
+    // var votedPublications = req.body && req.body.papers
+    //   ? Controller.votesFromPost(req.body.papers, publications) : [];
+    // var entry = {
+    //     "userId": res.locals.user.id
+    //   , "isCommittee": res.locals.user.isCommittee
+    //   , "votes": _.map(votedPublications, (publication)=>publication.paperId)
+    //   , "date": new Date()
+    // };
 
-    var db = req.db;
-    var votes = db.collection(collection);
-    votes.insertOne(entry).then(function (result) {
-      res.render('papers-complete', { title: '発表賞の投票完了 | ' + res.locals.confName, publications: votedPublications });
-    });
+    // var db = req.db;
+    // var votes = db.collection(collection);
+    // votes.insertOne(entry).then(function (result) {
+    //   res.render('papers-complete', { title: '発表賞の投票完了 | ' + res.locals.confName, publications: votedPublications });
+    // });
+    res.json({"error": "voting is disabled"});
   });
 });
 
