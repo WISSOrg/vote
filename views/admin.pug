@@ -2,6 +2,9 @@ extends layout
 
 block content
   h2 集計結果
+  .text-center
+    a.update.btn.btn-lg.btn-primary(href='#') 更新する
+  hr
   .papers
     h3 発表賞
     .results
@@ -16,6 +19,9 @@ block content
     h3 プログラム委員による対話発表賞
     .results
       .alert.alert-primary(role='alert') 集計中です…
+  hr
+  .text-center
+    a.update.btn.btn-lg.btn-primary(href='#') 更新する
 
 block jquery
   script(src='https://code.jquery.com/jquery-3.2.1.min.js', integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=', crossorigin='anonymous')

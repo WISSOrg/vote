@@ -16,32 +16,56 @@ function initialize(voteType, callback) {
   });
 }
 
+$('a.update').click(function (e) {
+  e.preventDefault();
+  updateVotes('paper');
+  updateVotes('demo');
+  updateVotes('demo', true);
+  return false;
+});
+
 function updateVotes(voteType, committeeFilter, callback) {
-  $.getJSON(pathname + "/api/" + voteType + "s/votes"
-      + (committeeFilter ? '/committee' : ''), function(votes){
-    var $div = $('.' + (committeeFilter ? 'committee-' : '') + voteType + 's .results');
-    $div.empty();
-    $div.append('<table class="table table-striped"><thead><tr><th class="w-75">発表</th><th class="w-25">得票数</th></tr></thead><tbody></tbody></table>');
-    var $tbody = $div.find('tbody');
-    for (var key in votes.counts) {
+  var $div = $('.' + (committeeFilter ? 'committee-' : '') + voteType + 's .results');
+  var $alert = $div.find('.alert');
+  $alert.nextAll().remove();
+  $alert.show();
+  setTimeout(function () {
+    $.getJSON(pathname + "/api/" + voteType + "s/votes"
+        + (committeeFilter ? '/committee' : ''), function(votes){
+      $alert.hide();
+      $div.append('<table class="table table-striped"><thead><tr><th class="w-75">発表</th><th class="w-25">得票数</th></tr></thead><tbody></tbody></table>');
+      var arr = [];
+      for (var key in votes.counts) {
+        var condition = {};
+        condition[voteType+'Id'] = key;
+        var entry = findEntry(db[voteType], condition);
+        entry['key'] = key;
+        arr.push(entry);
+      }
+      arr.sort(function (a, b) {
+        return b.key > a.key ? -1 : 1;
+      });
+      arr.sort(function (a, b) {
+        return votes.counts[b.key] - votes.counts[a.key];
+      });
+      var $tbody = $div.find('tbody');
+      for (var i = 0; i < arr.length; i ++) {
+        var entry = arr[i];
 
-      var condition = {};
-      condition[voteType+'Id'] = key;
-      var entry = findEntry(db[voteType], condition);
+        var $title = $('<strong></strong>')
+          .append('<span class="badge badge-pill badge-secondary">' + entry.key + '</span>&nbsp;')
+          .append(entry.title);
 
-      var $title = $('<strong></strong>')
-        .append('<span class="badge badge-pill badge-secondary">' + key + '</span>&nbsp;')
-        .append(entry.title);
-
-        var $tr = $('<tr><td class="w-75 pub"></td><td class="w-25">' + votes.counts[key] + '</td></tr>');
-      $tr.find('td.pub')
-        .append($title)
-        .append('<br>')
-        .append('<small>' + entry.authors + '</small>');
-      $tbody.append($tr);
-    }
-    if (callback) callback();
-  });
+        var $tr = $('<tr><td class="w-75 pub"></td><td class="w-25">' + votes.counts[entry.key] + '</td></tr>');
+        $tr.find('td.pub')
+          .append($title)
+          .append('<br>')
+          .append('<small>' + entry.authors + '</small>');
+        $tbody.append($tr);
+      }
+      if (callback) callback();
+    });
+  }, 300);
 }
 
 function findEntry(arr, condition) {
