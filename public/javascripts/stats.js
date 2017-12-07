@@ -3,19 +3,22 @@ var pathname = location.pathname;
 if (pathname.substr(-1) === '/') pathname = pathname.substring(0, pathname.length-1);
 var rootDir = pathname.substring(0, pathname.length-'/stats'.length);
 
-var interval = 2000, data = [], viewData;
+var interval = 2000, data = [], viewData, numUsers = 0;
 
 $('.interval').text(interval);
 
 $(window).resize(function () { updateGraph(true); });
 
-getData(function () {
-  createGraph();
-  setInterval(function () {
-    getData(function () {
-      updateGraph();
-    });
-  }, interval);
+$.getJSON(rootDir + "/users/api/count", function(results){
+  numUsers = results.counts;
+  getData(function () {
+    createGraph();
+    setInterval(function () {
+      getData(function () {
+        updateGraph();
+      });
+    }, interval);
+  });
 });
 
 function getData(callback) {
@@ -26,7 +29,8 @@ function getData(callback) {
       $.getJSON(rootDir + "/api/demos/votes/count", function(results){
         var demoVotes = results.count;
         data = [
-            { "name": "システム登録者数", "count": voters }
+            { "name": "参加登録者数", "count": numUsers }
+          , { "name": "番号発行数", "count": voters }
           , { "name": "発表賞", "count": paperVotes }
           , { "name": "対話発表賞", "count": demoVotes }
         ];
@@ -98,13 +102,6 @@ function updateGraph(instant) {
     .attr("height", barHeight * data.length);
 
   var bar = chart.selectAll("g").data(data);
-  bar.exit().remove();
-
-  bar.enter()
-    .append("g")
-    .attr("transform", function(d, i) {
-      return "translate(0," + i * barHeight + ")";
-    });
 
   var rect = bar.select("rect");
   if (!instant) {

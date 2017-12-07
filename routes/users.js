@@ -131,6 +131,11 @@ function addHandlers() {
     }
   });
 
+  /* Count users */
+  router.get('/api/count', function(req, res, next) {
+    res.json({'counts': users.length});
+  });
+
   /* List users */
   router.get('/api/all', function(req, res, next) {
     if (!res.locals.user
