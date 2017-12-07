@@ -9,11 +9,9 @@ $('.interval').text(interval);
 
 $(window).resize(updateGraph);
 
-var dx = 0;
 getData(function () {
   createGraph();
   setInterval(function () {
-    dx++;
     getData(function () {
       updateGraph();
     });
@@ -28,7 +26,7 @@ function getData(callback) {
       $.getJSON(rootDir + "/api/demos/votes/count", function(results){
         var demoVotes = results.count;
         data = [
-            { "name": "システム登録者数", "count": voters + dx }
+            { "name": "システム登録者数", "count": voters }
           , { "name": "発表賞", "count": paperVotes }
           , { "name": "対話発表賞", "count": demoVotes }
         ];
@@ -100,7 +98,11 @@ function updateGraph() {
     .append("text");
 
   bar.select("rect")
+    .style("fill", "#0b6")
     .transition()
+    .ease("circle")
+    .duration(700)
+    .style("fill", "#093")
     .attr("width", function(d) {
       return x(d.count) + "px";
     })
@@ -108,6 +110,8 @@ function updateGraph() {
 
   bar.select("text")
     .transition()
+    .ease("circle")
+    .duration(700)
     .attr("x", function(d) {
       return x(d.count) - 3;
     })
