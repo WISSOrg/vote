@@ -26,6 +26,8 @@ html(lang='ja')
             a.btn.btn-outline-primary(href=rootDir+'/papers', class=user ? undefined : 'disabled') 発表賞
           .nav-item
             a.btn.btn-outline-primary(href=rootDir+'/demos', class=user ? undefined : 'disabled') 対話発表賞
+          .nav-item
+            a.btn.btn-outline-primary(href=rootDir+'/stats') 投票状況
           - if (user && user.isCommittee) {
           .nav-item
             a.btn.btn-outline-danger(href=rootDir+'/admin', class=user ? undefined : 'disabled') 集計結果

@@ -140,29 +140,6 @@ function addHandlers() {
     res.json(users);
   });
 
-  /* Count up vote ids */
-  router.get('/api/voters/count', function(req, res, next) {
-    var db = req.db;
-    var users_ = db.collection(userCollection);
-    users_.find({}).count(function (err, count) {
-      res.json({"count": err ? 0 : count});
-    });
-  });
-
-  /* Count up votes */
-  router.get('/api/:voteType/votes/count', function(req, res, next) {
-    var db = req.db;
-    var votes = db.collection(req.params['voteType']);
-    countVotes(votes, (results) => res.json(results), false);
-  });
-  
-  /* Count up votes by committee members */
-  router.get('/api/:voteType/votes/committee/count', function(req, res, next) {
-    var db = req.db;
-    var votes = db.collection(req.params['voteType']);
-    countVotes(votes, (results) => res.json(results), true);
-  });
-  
   /* List vote ids */
   router.get('/api/voters', function(req, res, next) {
     if (!res.locals.user
@@ -230,16 +207,6 @@ function moveRandomEntry(collection, callback) {
         return;
       });
     });
-  });
-}
-
-function countVotes(votes, callback, committeeFilter) {
-  var query = committeeFilter ? {"isCommittee" : true} : undefined;
-  votes.distinct("userId", query, function(err, docs) {
-    if (err || !Array.isArray(docs)) {
-      return callback({"count": 0});
-    }
-    callback({"count": docs.length});
   });
 }
 

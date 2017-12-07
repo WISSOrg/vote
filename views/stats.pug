@@ -1,0 +1,24 @@
+extends layout
+
+block content
+  h2 投票状況
+  p 現在の投票状況を表示します。 
+    strong.interval n
+    |  [ms]ごとに表示が更新されます。
+  .graph
+  hr
+  h2 他の人を投票に誘おう
+  p 他の人を投票に誘う場合は、以下のURLを伝えるか、QRコードを見せてください。
+  form
+    .form-group
+      label 投票システムのURL:
+      input.form-control(name="url", type="text", value=url, readonly)
+  .text-center.qr.code
+    img(src='https://chart.googleapis.com/chart?chs=320x320&cht=qr&chl=' + encodeURIComponent(url) + '&choe=UTF-8')
+
+block jquery
+  script(src='https://code.jquery.com/jquery-3.2.1.min.js', integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=', crossorigin='anonymous')
+
+block scripts
+  script(src='http://d3js.org/d3.v3.min.js')
+  script(src=rootDir+'/javascripts/stats.js')
