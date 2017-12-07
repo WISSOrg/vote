@@ -18,7 +18,8 @@ csv().fromFile('config/demos.csv')
 
   /* Demos list */
   router.get('/', function(req, res, next) {
-    if (!res.locals.user) {
+    if (!res.locals.demoEnabled
+        || !res.locals.user) {
       return res.redirect(res.locals.rootDir + '/');
     }
 
@@ -31,7 +32,8 @@ csv().fromFile('config/demos.csv')
 
   /* Voting complete */
   router.post('/vote', function(req, res, next) {
-    if (!res.locals.user) {
+    if (!res.locals.demoEnabled
+        || !res.locals.user) {
       return res.redirect(res.locals.rootDir + '/');
     }
 

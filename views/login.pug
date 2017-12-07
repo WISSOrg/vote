@@ -13,14 +13,17 @@ block content
   .alert.alert-info(role="alert") ログイン済みです。このページをブックマークするか、以下のQRコードを使えば、いつでもこの投票用番号にアクセスできます。
   -   }
   .alert.alert-info(role="alert")
-    //- a.btn.btn-sm.btn-outline-primary(href=rootDir + '/papers') 発表賞
-    //- |  &amp; 
-    //- a.btn.btn-sm.btn-outline-primary(href=rootDir + '/demos') 対話発表賞
-    //- |  どちらの投票もお忘れなく！ 
+    - if (paperEnabled && demoEnabled) {
+    a.btn.btn-sm.btn-outline-primary(href=rootDir + '/papers') 発表賞
+    |  &amp; 
     a.btn.btn-sm.btn-outline-primary(href=rootDir + '/demos') 対話発表賞
-    |  の発表をお忘れなく！
+    |  どちらの投票もお忘れなく！ 
+    - } else if (demoEnabled) {
+    a.btn.btn-sm.btn-outline-primary(href=rootDir + '/demos') 対話発表賞
+    |  の発表をお忘れなく！ 
+    - }
     a.btn.btn-sm.btn-outline-primary(href=rootDir + '/stats') 投票状況
-    |  を確認できるページができました。
+    |  を確認できるページもあります。
   - }
   - var clsId = failure === 1 || failure === 2 ? 'is-invalid' : undefined;
   - if (failure === 1) {

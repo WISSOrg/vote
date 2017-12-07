@@ -43,9 +43,11 @@ app.use((req, res, next)=>{
   } else {
     res.locals.user = req.session.user;
   }
-  res.locals.host = config.host;
-  res.locals.admins = config.admins;
   res.locals.confName = config.confName;
+  res.locals.admins = config.admins;
+  res.locals.paperEnabled = config.paperEnabled;
+  res.locals.demoEnabled = config.demoEnabled;
+  res.locals.host = config.host;
   res.locals.rootDir = config.rootDir;
   next();
 });
