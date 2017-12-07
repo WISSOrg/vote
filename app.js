@@ -69,7 +69,7 @@ app.use(expressMongoDb(config.mongoConnectionString));
 
 // routers
 app.use(config.rootDir + '/', index);
-app.use(config.rootDir + '/papers', papers);
+// app.use(config.rootDir + '/papers', papers);
 app.use(config.rootDir + '/demos', demos);
 app.use(config.rootDir + '/users', users);
 app.use(config.rootDir + '/admin', admin);
