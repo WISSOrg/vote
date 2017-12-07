@@ -7,7 +7,7 @@ var interval = 2000, data = [], viewData;
 
 $('.interval').text(interval);
 
-$(window).resize(updateGraph);
+$(window).resize(function () { updateGraph(true); });
 
 getData(function () {
   createGraph();
@@ -70,7 +70,7 @@ function createGraph() {
     });
 }
 
-function updateGraph() {
+function updateGraph(instant) {
   var width = $(".graph").width()
     , barHeight = 50;
 
@@ -97,21 +97,29 @@ function updateGraph() {
     .append("rect")
     .append("text");
 
-  bar.select("rect")
-    .style("fill", "#0b6")
-    .transition()
-    .ease("circle")
-    .duration(700)
-    .style("fill", "#093")
+  var rect = bar.select("rect");
+  if (!instant) {
+    rect
+      .style("fill", "#0b6")
+      .transition()
+      .ease("circle")
+      .duration(700)
+      .style("fill", "#093")
+  }
+  rect
     .attr("width", function(d) {
       return x(d.count) + "px";
     })
     .attr("height", barHeight - 5);
 
-  bar.select("text")
-    .transition()
-    .ease("circle")
-    .duration(700)
+  var text = bar.select("text");
+  if (!instant) {
+    text
+      .transition()
+      .ease("circle")
+      .duration(700)
+  }
+  text
     .attr("x", function(d) {
       return x(d.count) - 3;
     })
