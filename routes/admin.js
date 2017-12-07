@@ -38,12 +38,6 @@ router.get('/api/:voteType/votes', function(req, res, next) {
   });
 });
 
-router.get('/api/:voteType/votes/count', function(req, res, next) {
-  var db = req.db;
-  var votes = db.collection(req.params['voteType']);
-  countVotes(votes, (results) => res.json(results), false);
-});
-
 router.get('/api/:voteType/votes/committee', function(req, res, next) {
   var db = req.db;
   var votes = db.collection(req.params['voteType']);
@@ -53,12 +47,6 @@ router.get('/api/:voteType/votes/committee', function(req, res, next) {
     }
     return res.json(results);
   }, true);
-});
-
-router.get('/api/:voteType/votes/committee/count', function(req, res, next) {
-  var db = req.db;
-  var votes = db.collection(req.params['voteType']);
-  countVotes(votes, (results) => res.json(results), true);
 });
 
 router.get('/api/:voteType/:userId', function(req, res, next) {
@@ -90,16 +78,6 @@ router.get('/api/all/:voteType/:userId', function(req, res, next) {
     res.json({"results": docs});
   });
 });
-
-function countVotes(votes, callback, committeeFilter) {
-  var query = committeeFilter ? {"isCommittee" : true} : undefined;
-  votes.distinct("userId", query, function(err, docs) {
-    if (err || !Array.isArray(docs)) {
-      return callback({"count": 0});
-    }
-    callback({"count": docs.length});
-  });
-}
 
 function getVotes(votes, callback, committeeFilter) {
   var pipeline = [
