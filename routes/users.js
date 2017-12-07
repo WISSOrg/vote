@@ -108,22 +108,22 @@ function addHandlers() {
 
         // Allow creating infinite new users by admins
         if (_.includes(res.locals.admins, user.id)) {
-          return createNewUser(false);
+          return createNewUser(false, true);
         }
         return res.redirect(res.locals.rootDir + '/?failure=4' + param);
       }
 
       // Limit creating only one user by the others
-      createNewUser(user.isCommittee);
+      createNewUser(user.isCommittee, false);
     });
 
-    function createNewUser(isCommittee) {
+    function createNewUser(isCommittee, isAdmin) {
 
       // TODO: duplicate check
       var voteId = guid();
 
-      var newSignup = signups.insertOne({id: user.id})
-        , newUser = users_.insertOne({id: voteId, isCommittee: isCommittee});
+      var newSignup = signups.insertOne({id: user.id, isAdmin: isAdmin})
+        , newUser = users_.insertOne({id: voteId, isCommittee: isCommittee, isAdmin: isAdmin});
       Promise.all([newSignup, newUser]).then(function(){
         res.redirect(res.locals.rootDir + '/users/login?id=' + voteId);
         moveRandomEntry(users_);
@@ -138,6 +138,15 @@ function addHandlers() {
       return res.status(403).json({'error': 'you are not a committee member!'});
     }
     res.json(users);
+  });
+
+  /* Count up vote ids */
+  router.get('/api/voters/count', function(req, res, next) {
+    var db = req.db;
+    var users_ = db.collection(userCollection);
+    users_.find({}).count(function (err, count) {
+      res.json({"count": err ? 0 : count});
+    });
   });
 
   /* List vote ids */
