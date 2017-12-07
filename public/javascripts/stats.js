@@ -36,13 +36,10 @@ function getData(callback) {
   });
 }
 
+var labelWidth = 0, margin = 7;
 function createGraph() {
   var width = $(".graph").width()
     , barHeight = 50;
-
-  var x = d3.scale.linear()
-    .domain([0, d3.max(data, function (d) { return d.count; })])
-    .range([0, width]);
 
   var chart = d3.select(".graph svg")
     .attr("width", width)
@@ -53,20 +50,38 @@ function createGraph() {
   g.attr("transform", function(d, i) {
     return "translate(0," + i * barHeight + ")";
   });
+
+  labelWidth = 0;
+  g.append("text")
+    .attr("class", "label")
+    .attr("y", barHeight / 2)
+    .attr("dy", ".15em")
+    .text(function(d){
+      return d.name;
+    }).each(function() {
+      labelWidth = Math.ceil(Math.max(labelWidth, this.getBBox().width));
+    });
+
+  var x = d3.scale.linear()
+    .domain([0, d3.max(data, function (d) { return d.count; })])
+    .range([0, width - (labelWidth + margin)]);
+
   g.append("rect")
+    .attr("x", labelWidth + margin)
     .attr("width", function(d) {
       return x(d.count) + "px";
     })
     .attr("height", barHeight - 5);
   g.append("text")
+    .attr("class", "data")
     .attr("x", function(d) {
-      return x(d.count) - 3;
+      return x(d.count) - 3 + labelWidth + margin;
     })
     .attr("dx", "-.2em")
     .attr("y", barHeight / 2)
     .attr("dy", ".15em")
     .text(function(d) {
-      return d.name + "(" + d.count + ")";
+      return d.count;
     });
 }
 
@@ -76,7 +91,7 @@ function updateGraph(instant) {
 
   var x = d3.scale.linear()
     .domain([0, d3.max(data, function (d) { return d.count; })])
-    .range([0, width]);
+    .range([0, width - (labelWidth + margin)]);
 
   var chart = d3.select(".graph svg")
     .attr("width", width)
@@ -90,12 +105,6 @@ function updateGraph(instant) {
     .attr("transform", function(d, i) {
       return "translate(0," + i * barHeight + ")";
     });
-  
-  bar.filter(function() {
-    return d3.select(this).select("rect").empty();
-  })
-    .append("rect")
-    .append("text");
 
   var rect = bar.select("rect");
   if (!instant) {
@@ -109,10 +118,9 @@ function updateGraph(instant) {
   rect
     .attr("width", function(d) {
       return x(d.count) + "px";
-    })
-    .attr("height", barHeight - 5);
+    });
 
-  var text = bar.select("text");
+  var text = bar.select("text.data");
   if (!instant) {
     text
       .transition()
@@ -121,12 +129,9 @@ function updateGraph(instant) {
   }
   text
     .attr("x", function(d) {
-      return x(d.count) - 3;
+      return x(d.count) - 3 + labelWidth + margin;
     })
-    .attr("dx", "-.2em")
-    .attr("y", barHeight / 2)
-    .attr("dy", ".15em")
     .text(function(d) {
-      return d.name + "(" + d.count + ")";
+      return d.count;
     });
 }
