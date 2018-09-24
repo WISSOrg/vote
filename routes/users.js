@@ -1,28 +1,21 @@
 var _ = require('lodash');
-var csv = require('csvtojson');
+var fs = require('fs');
+// var csv = require('csvtojson');
 var express = require('express');
 var router = express.Router();
 var users = []
   , signupCollection = 'signups'
   , userCollection = 'users';
 
-csv().fromFile('config/users.csv')
-  .on('json', (jsonObj)=>{
-    // "id": "100",
-    // "familyName": "Hoge",
-    // "givenName": "Fuga",
-    // "familyYomi": "ほげ",
-    // "givenYomi": "ふが",
-    // "mail": "mail@example.com",
-    // "isCommittee": "1"
-    var user = _.clone(jsonObj);
-    user.id = parseInt(user.id);
-    user.isCommittee = parseInt(user.isCommittee) === 1;
-    users.push(user);
-  })
-  .on('done', (error)=>{
-    addHandlers();
-  });
+fs.readFile('config/users.json', { encoding: 'utf8' }, (err, data) => {
+  // "id" : 9999,
+  // "email" : "jun.kato@aist.go.jp",
+  // "name1" : "加藤",
+  // "name2" : "淳",
+  // "isCommittee": "1"
+  users = JSON.parse(data);
+  addHandlers();
+});
 
 function addHandlers() {
 
@@ -83,10 +76,10 @@ function addHandlers() {
     }
 
     var param = '&id=' + req.body.id
-      + '&familyYomi=' + req.body.familyYomi;
+      + '&email=' + req.body.email;
     if (!req.body.id
         || isNaN(parseInt(req.body.id))
-        || !req.body.familyYomi) {
+        || !req.body.email) {
       return res.redirect(res.locals.rootDir + '/?failure=1' + param);
     }
 
@@ -96,7 +89,7 @@ function addHandlers() {
     if (!user) {
       return res.redirect(res.locals.rootDir + '/?failure=2' + param);
     }
-    if (user.familyYomi !== req.body.familyYomi) {
+    if (user.email !== req.body.email) {
       return res.redirect(res.locals.rootDir + '/?failure=3' + param);
     }
 

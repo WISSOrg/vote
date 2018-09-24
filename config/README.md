@@ -13,10 +13,23 @@ Add config.json in the following format:
 }
 ```
 
-Add users.csv in the following format:
+Add users.json in the following format:
 ```
-id,familyName,givenName,familyYomi,givenYomi,mail,isCommittee
-100,Hoge,Fuga,ほげ,ふが,mail@example.com,1
+[
+  {
+		"id" : 1111,
+		"email" : "i@junkato.jp",
+		"name1" : "加藤",
+		"name2" : "淳"
+	},
+  {
+		"id" : 9999,
+		"email" : "jun.kato@aist.go.jp",
+		"name1" : "加藤",
+		"name2" : "淳",
+		"isCommittee" : true
+	}
+]
 ```
 
 Add papers.csv in the following format:

@@ -11,10 +11,10 @@ router.get('/', function(req, res, next) {
   }
 
   // load preset values
-  var id, familyYomi;
+  var id, email;
   if (req.query) {
     if (req.query.id) id = req.query.id;
-    if (req.query.familyYomi) familyYomi = req.query.familyYomi;
+    if (req.query.email) email = req.query.email;
   }
 
   // get error code
@@ -29,7 +29,7 @@ router.get('/', function(req, res, next) {
       title: res.locals.confName + ' 投票システム'
     , failure: failure
     , id: id
-    , familyYomi: familyYomi });
+    , email: email });
 });
 
 /* About this system */
