@@ -21,20 +21,47 @@
 - `Node.js`と`MongoDB`が動作する環境が必要です
 - とくに`MongoDB`が認証なしでアクセスできるサーバが立った状態でないと起動しません
 - Windows, Mac OS X, Debianで動作確認しています
+- パッケージマネージャは `npm` でなく `yarn` を使っています
 
 `config` の中に適切なファイルを置いたら、以下のコマンドで起動します。
 
 ```
-npm install
-npm start
+yarn install
+yarn start
 ```
 
 永続化したい場合は `pm2` がおすすめです。
 
 ```
-npm install -g pm2
+yarn global add pm2
 pm2 start bin/www
 pm2 stop bin/www
+```
+
+起動ポートを変えたい場合は環境変数 `PORT` にポート番号を指定して起動してください。
+
+```
+cross-env PORT=3001 node ./bin/www
+```
+
+3001番ポートで起動するコマンド例は `package.json` `start3001` に記載されています。以下のコマンドで試せます。
+
+```
+yarn start3001
+```
+
+`pm2` と組み合わせる場合は [Ecosystem File](https://pm2.io/doc/en/runtime/guide/ecosystem-file/) を作成します。
+
+```
+module.exports = {
+  apps : [{
+    name: "WISSVote",
+    script: "./bin/www",
+    env: {
+      PORT: 3000,
+    }
+  }]
+}
 ```
 
 ## 実装
@@ -48,4 +75,4 @@ pm2 stop bin/www
 - [WISS 2017 投票システムについて](http://www.wiss.org/WISS2017Local/vote/about)
 
 ---
-&copy; 加藤淳 & 小山裕己 2017
+&copy; 加藤淳 & 小山裕己 2018
