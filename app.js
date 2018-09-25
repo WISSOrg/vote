@@ -47,6 +47,7 @@ app.use((req, res, next)=>{
   res.locals.admins = config.admins;
   res.locals.paperEnabled = config.paperEnabled;
   res.locals.demoEnabled = config.demoEnabled;
+  res.locals.protocol = config.protocol || "http";
   res.locals.host = config.host;
   res.locals.rootDir = config.rootDir;
   next();

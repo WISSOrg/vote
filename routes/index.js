@@ -40,7 +40,7 @@ router.get('/about', function(req, res, next) {
 
 /* Statistics */
 router.get('/stats', function(req, res, next) {
-  res.locals.url = req.protocol + '://' + res.locals.host /* req.get('host') */ + res.locals.rootDir;
+  res.locals.url = res.locals.protocol + '://' + res.locals.host + res.locals.rootDir;
   res.render('stats', {
       title: res.locals.confName + ' 投票状況' });
 });

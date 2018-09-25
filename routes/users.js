@@ -41,7 +41,7 @@ function addHandlers() {
         , failure: parseInt(req.query.failure)
         , id: req.query.id });
     }
-    res.locals.url = req.protocol + '://' + res.locals.host /* req.get('host') */ + res.locals.rootDir;
+    res.locals.url = res.locals.protocol + '://' + res.locals.host + res.locals.rootDir;
 
     if (!req.query.id) {
       if (res.locals.user) {

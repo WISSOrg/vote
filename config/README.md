@@ -6,6 +6,7 @@ Add config.json in the following format:
   "admins": [100, 108],
   "paperEnabled": false,
   "demoEnabled": true,
+	"protocol": "https", // defaults to http
   "host": "www.wiss.org",
   "rootDir": "/wiss2017",
   "cookieKeys": ["wiss2017", "vote2017"],
