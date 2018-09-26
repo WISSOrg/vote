@@ -3,9 +3,9 @@ extends layout
 block scripts
   script(src=rootDir+'/javascripts/vote.js')
 
-mixin submit-button()
+mixin submit-button(enabled)
   .text-center
-    input.btn.btn-lg.btn-primary(type='submit', value='投票内容を決定する', class=publicationsFound ? undefined : 'disabled')
+    input.btn.btn-lg.btn-primary(type='submit', value='投票内容を決定する', class=enabled ? undefined : 'disabled')
 
 mixin votes-list(voteType)
   ul
@@ -36,4 +36,4 @@ mixin votes-list(voteType)
     - } else {
     .alert.alert-danger 発表データが見つかりません。
     - }
-    +submit-button()
+    +submit-button(publicationsFound)
