@@ -1,6 +1,6 @@
 # Project-related files
 config/config.json
-config/users.csv
+config/users.json
 config/papers.csv
 config/demos.csv
 mongodb/data/*
