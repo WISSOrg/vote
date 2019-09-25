@@ -35,7 +35,8 @@ router.get('/', function(req, res, next) {
 /* About this system */
 router.get('/about', function(req, res, next) {
   res.render('about', {
-      title: res.locals.confName + ' 投票システムについて' });
+      title: res.locals.confName + ' 投票システムについて'
+    , message: res.locals.message });
 });
 
 /* Statistics */

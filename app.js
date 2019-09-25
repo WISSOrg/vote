@@ -50,6 +50,7 @@ app.use((req, res, next)=>{
   res.locals.protocol = config.protocol || "http";
   res.locals.host = config.host;
   res.locals.rootDir = config.rootDir;
+  res.locals.message = config.message;
   next();
 });
 
