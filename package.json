@@ -12,7 +12,7 @@
     "cookie-session": "^2.0.0-beta.3",
     "csvtojson": "^1.1.9",
     "debug": "~2.6.9",
-    "express": "~4.15.5",
+    "express": "~4.17.3",
     "express-mongo-db": "^2.0.3",
     "lodash": "^4.17.4",
     "mongodb": "^2.2.33",
